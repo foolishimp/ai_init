@@ -290,6 +290,7 @@ class TestDashboardSetup:
             "test-dashboard-module/package-lock.json",
             "test-dashboard-module/test-registry.json",
             "test-dashboard-module/*.log",
+            "test-registry.json",  # Generated at project root
         ]
         
         if gitignore_path.exists():
@@ -320,9 +321,8 @@ class TestDashboardSetup:
         print("\n📚 Next Steps:")
         
         if dashboard_exists:
-            print("1. Start the test dashboard:")
-            print(f"   cd {self.dashboard_dir.relative_to(self.target)}")
-            print("   npm start")
+            print("1. Start the test dashboard (from project root):")
+            print(f"   PROJECT_DIRS=\".\" node {self.dashboard_dir.relative_to(self.target)}/server.js")
             print()
             print(f"2. Open http://localhost:{self.port} in your browser")
             print()
@@ -343,7 +343,7 @@ class TestDashboardSetup:
             print("🔄 To update dashboard later:")
             print(f"   python {Path(__file__).name} --force")
         
-        print(f"\n🎯 Start dashboard: cd {self.dashboard_dir.relative_to(self.target)} && npm start")
+        print(f"\n🎯 Start dashboard: PROJECT_DIRS=\".\" node {self.dashboard_dir.relative_to(self.target)}/server.js")
 
 
 def main():

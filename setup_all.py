@@ -171,7 +171,7 @@ class AIInitSetup:
             print(f"\n📊 Test-Driven Development Dashboard:")
             print(f"   📁 test-dashboard-module/ - Web-based test management")
             print(f"   🌐 Repository: https://github.com/foolishimp/test_dd_dashboard")
-            print(f"   🚀 Start with: cd test-dashboard-module && npm start")
+            print(f"   🚀 Start with: PROJECT_DIRS=\".\" node test-dashboard-module/server.js")
             print(f"   🌐 Then open: http://localhost:{self.dashboard_port}")
         
         print(f"\n📚 Recommended next steps:")
