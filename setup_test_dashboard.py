@@ -34,7 +34,7 @@ class TestDashboardSetup:
     """Setup Test-Driven Development Dashboard in a project."""
     
     def __init__(self, target: str = ".", force: bool = False, 
-                 port: int = 8085, version: Optional[str] = "v1.1.1",
+                 port: int = 8085, version: Optional[str] = "v1.2.0",
                  no_git: bool = False, offline: bool = False):
         self.target = Path(target).resolve()
         self.force = force
