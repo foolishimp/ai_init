@@ -105,7 +105,7 @@ class AIInitSetup:
             
         if not self.dashboard_installer.exists():
             missing.append(f"Dashboard installer: {self.dashboard_installer}")
-            missing.append(f"Note: Dashboard installer should be at ai_init root, not in test-dashboard-module/")
+            missing.append(f"Note: Dashboard installer should be at ai_init root, not in test_dd_dashboard/")
         
         if missing:
             print(f"\n❌ Missing installer scripts:")
@@ -169,9 +169,9 @@ class AIInitSetup:
         
         if installed_dashboard:
             print(f"\n📊 Test-Driven Development Dashboard:")
-            print(f"   📁 test-dashboard-module/ - Web-based test management")
+            print(f"   📁 test_dd_dashboard/ - Web-based test management")
             print(f"   🌐 Repository: https://github.com/foolishimp/test_dd_dashboard")
-            print(f"   🚀 Start with: PROJECT_DIRS=\".\" node test-dashboard-module/server.js")
+            print(f"   🚀 Start with: PROJECT_DIRS=\".\" node test_dd_dashboard/server.js")
             print(f"   🌐 Then open: http://localhost:{self.dashboard_port}")
         
         print(f"\n📚 Recommended next steps:")

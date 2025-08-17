@@ -42,7 +42,7 @@ class TestDashboardSetup:
         self.version = version
         self.no_git = no_git
         self.offline = offline
-        self.dashboard_dir = self.target / "test-dashboard-module"
+        self.dashboard_dir = self.target / "test_dd_dashboard"
         
         # GitHub repository details
         self.repo_url = "https://github.com/foolishimp/test_dd_dashboard.git"
@@ -60,18 +60,18 @@ class TestDashboardSetup:
         dashboard_exists = self.dashboard_dir.exists()
         
         print(f"\n📋 Current state:")
-        print(f"   test-dashboard-module/: {'✅ exists' if dashboard_exists else '❌ missing'}")
+        print(f"   test_dd_dashboard/: {'✅ exists' if dashboard_exists else '❌ missing'}")
         
         # Install dashboard if missing or force flag is set
         if not dashboard_exists or self.force:
             if dashboard_exists and self.force:
-                print(f"\n🔄 Reinstalling test-dashboard-module (--force flag)")
+                print(f"\n🔄 Reinstalling test_dd_dashboard (--force flag)")
             else:
-                print(f"\n📊 Installing test-dashboard-module...")
+                print(f"\n📊 Installing test_dd_dashboard...")
             
             self._install_dashboard()
         else:
-            print(f"\n⏭️  Skipping test-dashboard-module (already exists)")
+            print(f"\n⏭️  Skipping test_dd_dashboard (already exists)")
             if not self.offline:
                 print(f"💡 Use --force to reinstall or --offline to skip updates")
         
@@ -95,6 +95,9 @@ class TestDashboardSetup:
         
         # Update configuration for target
         self._update_dashboard_config()
+        
+        # Create project-specific configuration
+        self._create_project_config()
         
         # Install Node.js dependencies
         self._install_node_dependencies()
@@ -247,6 +250,30 @@ class TestDashboardSetup:
             except Exception as e:
                 print(f"⚠️  Could not update server port: {e}")
     
+    def _create_project_config(self):
+        """Create project-specific configuration file."""
+        config_path = self.dashboard_dir / "project-config.json"
+        
+        # Generate project-specific port (8085 + hash of project path for uniqueness)
+        import hashlib
+        path_hash = abs(hash(str(self.target))) % 100  # 0-99
+        project_port = self.port + path_hash if self.port == 8085 else self.port
+        
+        project_config = {
+            "projectName": self.target.name,
+            "projectPath": str(self.target),
+            "port": project_port,
+            "created": datetime.now().isoformat(),
+            "description": f"Test dashboard configuration for {self.target.name}"
+        }
+        
+        try:
+            with open(config_path, 'w') as f:
+                json.dump(project_config, f, indent=2)
+            print(f"📝 Created project config: {self.target.name} on port {project_port}")
+        except Exception as e:
+            print(f"⚠️  Could not create project config: {e}")
+    
     def _install_node_dependencies(self):
         """Install Node.js dependencies for the test dashboard."""
         package_json = self.dashboard_dir / "package.json"
@@ -278,7 +305,7 @@ class TestDashboardSetup:
             print("   Visit https://nodejs.org to download Node.js")
         except Exception as e:
             print(f"⚠️  Error installing dependencies: {e}")
-            print("   You can run 'npm install' manually in the test-dashboard-module directory")
+            print("   You can run 'npm install' manually in the test_dd_dashboard directory")
 
     def _update_gitignore(self):
         """Add appropriate .gitignore entries."""
@@ -286,10 +313,11 @@ class TestDashboardSetup:
         
         entries_to_add = [
             "\n# Test Dashboard Module (from test_dd_dashboard)",
-            "test-dashboard-module/node_modules/",
-            "test-dashboard-module/package-lock.json",
-            "test-dashboard-module/test-registry.json",
-            "test-dashboard-module/*.log",
+            "test_dd_dashboard/node_modules/",
+            "test_dd_dashboard/package-lock.json",
+            "test_dd_dashboard/test-registry.json",
+            "test_dd_dashboard/project-config.json",
+            "test_dd_dashboard/*.log",
             "test-registry.json",  # Generated at project root
         ]
         
@@ -297,7 +325,7 @@ class TestDashboardSetup:
             content = gitignore_path.read_text()
             
             # Check if already has test dashboard entries
-            if "test-dashboard-module" in content:
+            if "test_dd_dashboard" in content:
                 print("✓ .gitignore already configured for test dashboard")
                 return
             
@@ -337,13 +365,25 @@ class TestDashboardSetup:
             print("   - REFACTOR: Improve while keeping tests green")
             print()
             print("📝 Optional: Commit the changes:")
-            print("   git add test-dashboard-module/")
+            print("   git add test_dd_dashboard/")
             print("   git commit -m 'Add test dashboard module'")
             print()
             print("🔄 To update dashboard later:")
             print(f"   python {Path(__file__).name} --force")
         
+        # Get the configured port for final instructions
+        config_path = self.dashboard_dir / "project-config.json"
+        display_port = self.port
+        try:
+            if config_path.exists():
+                with open(config_path, 'r') as f:
+                    config = json.load(f)
+                    display_port = config.get('port', self.port)
+        except:
+            pass
+            
         print(f"\n🎯 Start dashboard: PROJECT_DIRS=\".\" node {self.dashboard_dir.relative_to(self.target)}/server.js")
+        print(f"🌐 Dashboard URL: http://localhost:{display_port}")
 
 
 def main():
