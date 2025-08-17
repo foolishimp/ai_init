@@ -29,12 +29,14 @@ class AIInitSetup:
     
     def __init__(self, target: str = ".", force: bool = False, 
                  claude_only: bool = False, dashboard_only: bool = False,
-                 dashboard_port: int = 8085, no_git: bool = False):
+                 dashboard_port: int = 8085, dashboard_version: str = "v1.0.0",
+                 no_git: bool = False):
         self.target = Path(target).resolve()
         self.force = force
         self.claude_only = claude_only
         self.dashboard_only = dashboard_only
         self.dashboard_port = dashboard_port
+        self.dashboard_version = dashboard_version
         self.no_git = no_git
         
         # Get the directory where this script is located (ai_init root)
@@ -142,7 +144,8 @@ class AIInitSetup:
             sys.executable,  # Use same Python interpreter  
             str(self.dashboard_installer),
             "--target", str(self.target),
-            "--port", str(self.dashboard_port)
+            "--port", str(self.dashboard_port),
+            "--version", str(self.dashboard_version)
         ]
         
         if self.force:
@@ -261,6 +264,12 @@ Examples:
     )
     
     parser.add_argument(
+        "--dashboard-version",
+        help="Dashboard version/tag to install (default: v1.0.0)",
+        default="v1.0.0"
+    )
+    
+    parser.add_argument(
         "--no-git",
         action="store_true",
         help="Don't add .gitignore entries"
@@ -280,6 +289,7 @@ Examples:
         claude_only=args.claude_only,
         dashboard_only=args.dashboard_only,
         dashboard_port=args.dashboard_port,
+        dashboard_version=args.dashboard_version,
         no_git=args.no_git
     )
     
