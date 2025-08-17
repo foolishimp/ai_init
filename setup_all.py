@@ -29,7 +29,7 @@ class AIInitSetup:
     
     def __init__(self, target: str = ".", force: bool = False, 
                  claude_only: bool = False, dashboard_only: bool = False,
-                 dashboard_port: int = 8085, dashboard_version: str = "v1.1.0",
+                 dashboard_port: int = 8085, dashboard_version: str = "v1.1.1",
                  no_git: bool = False):
         self.target = Path(target).resolve()
         self.force = force
@@ -265,8 +265,8 @@ Examples:
     
     parser.add_argument(
         "--dashboard-version",
-        help="Dashboard version/tag to install (default: v1.1.0)",
-        default="v1.1.0"
+        help="Dashboard version/tag to install (default: v1.1.1)",
+        default="v1.1.1"
     )
     
     parser.add_argument(
