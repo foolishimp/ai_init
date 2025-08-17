@@ -34,7 +34,7 @@ class TestDashboardSetup:
     """Setup Test-Driven Development Dashboard in a project."""
     
     def __init__(self, target: str = ".", force: bool = False, 
-                 port: int = 8085, version: Optional[str] = "v1.0.0",
+                 port: int = 8085, version: Optional[str] = "v1.1.0",
                  no_git: bool = False, offline: bool = False):
         self.target = Path(target).resolve()
         self.force = force
@@ -98,6 +98,9 @@ class TestDashboardSetup:
         
         # Create project-specific configuration
         self._create_project_config()
+        
+        # Create dashboard version file
+        self._create_dashboard_version_file()
         
         # Install Node.js dependencies
         self._install_node_dependencies()
@@ -273,6 +276,18 @@ class TestDashboardSetup:
             print(f"📝 Created project config: {self.target.name} on port {project_port}")
         except Exception as e:
             print(f"⚠️  Could not create project config: {e}")
+    
+    def _create_dashboard_version_file(self):
+        """Create dashboard version file for deployment tracking."""
+        version_path = self.dashboard_dir / "dashboard-version.txt"
+        
+        try:
+            version_content = self.version or "dev"
+            with open(version_path, 'w') as f:
+                f.write(version_content)
+            print(f"📝 Created dashboard version file: {version_content}")
+        except Exception as e:
+            print(f"⚠️  Could not create dashboard version file: {e}")
     
     def _install_node_dependencies(self):
         """Install Node.js dependencies for the test dashboard."""
