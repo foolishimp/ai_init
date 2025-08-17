@@ -14,7 +14,7 @@ Options:
     --target PATH       Target directory for installation (default: current directory)
     --force            Overwrite existing files
     --port PORT        Default port for the dashboard (default: 8085)
-    --version TAG      Install specific version/tag (default: latest)
+    --version TAG      Install specific version/tag (default: v1.0.0)
     --no-git           Don't add .gitignore entries
     --offline          Use existing clone if available (don't pull updates)
 """
@@ -34,7 +34,7 @@ class TestDashboardSetup:
     """Setup Test-Driven Development Dashboard in a project."""
     
     def __init__(self, target: str = ".", force: bool = False, 
-                 port: int = 8085, version: Optional[str] = None,
+                 port: int = 8085, version: Optional[str] = "v1.0.0",
                  no_git: bool = False, offline: bool = False):
         self.target = Path(target).resolve()
         self.force = force
