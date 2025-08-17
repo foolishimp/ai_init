@@ -179,7 +179,10 @@ class ClaudeTasksSetup:
         directories = [
             self.claude_tasks_dir,
             self.claude_tasks_dir / "active",
-            self.claude_tasks_dir / "finished",
+            self.claude_tasks_dir / "finished", 
+            self.claude_tasks_dir / "todo",
+            self.target / ".claude",
+            self.target / ".claude" / "commands",
         ]
         
         for directory in directories:
@@ -261,6 +264,31 @@ class ClaudeTasksSetup:
             if not target_active.exists() or self.force:
                 shutil.copy2(active_tasks, target_active)
                 print(f"📄 Copied: active/ACTIVE_TASKS.md")
+        
+        # Copy todo files if they exist
+        todo_list = source_path / "todo" / "TODO_LIST.md"
+        if todo_list.exists():
+            target_todo = self.claude_tasks_dir / "todo" / "TODO_LIST.md"
+            if not target_todo.exists() or self.force:
+                shutil.copy2(todo_list, target_todo)
+                print(f"📄 Copied: todo/TODO_LIST.md")
+        
+        todo_command = source_path / "todo" / "todo.md"
+        if todo_command.exists():
+            target_todo_cmd = self.claude_tasks_dir / "todo" / "todo.md"
+            if not target_todo_cmd.exists() or self.force:
+                shutil.copy2(todo_command, target_todo_cmd)
+                print(f"📄 Copied: todo/todo.md")
+        
+        # Copy .claude commands if they exist
+        claude_commands_source = source_path.parent / ".claude" / "commands"
+        if claude_commands_source.exists():
+            claude_commands_target = self.target / ".claude" / "commands"
+            for cmd_file in claude_commands_source.glob("*.md"):
+                target_cmd = claude_commands_target / cmd_file.name
+                if not target_cmd.exists() or self.force:
+                    shutil.copy2(cmd_file, target_cmd)
+                    print(f"📄 Copied: .claude/commands/{cmd_file.name}")
     
     def _create_from_templates(self):
         """Create files from embedded templates."""
@@ -279,6 +307,191 @@ class ClaudeTasksSetup:
                 content = content.replace("[DATE]", datetime.now().strftime("%Y-%m-%d"))
                 target_file.write_text(content)
                 print(f"📄 Created: {file_name}")
+        
+        # Create todo files and commands
+        self._create_todo_files()
+        self._create_claude_commands()
+    
+    def _create_todo_files(self):
+        """Create todo-specific files."""
+        # Create TODO_LIST.md
+        todo_list_content = """# Todo List
+
+## Quick Todos
+*Items added via /todo command - convert to formal tasks when ready*
+
+*Last Updated: [DATE]*
+
+---
+
+## Todo Items
+
+*No todos currently. Use /todo "description" to add items quickly.*
+
+---
+
+## Instructions
+
+### Adding Todos
+- Use the `/todo` slash command: `/todo "implement new feature"`
+- Items are added with timestamp for quick capture
+- Convert important items to formal tasks in active/ACTIVE_TASKS.md
+
+### Managing Todos
+- ✅ **Completed**: Mark with checkmark and move to finished tasks if significant
+- ❌ **Cancelled**: Remove or mark as cancelled if no longer needed
+- ➡️ **Promoted**: Move to active/ACTIVE_TASKS.md as formal tasks
+
+### Todo vs Task Difference
+- **Todos**: Quick capture, informal, immediate thoughts
+- **Tasks**: Formal, estimated time, acceptance criteria, TDD process
+
+### Cleanup Process
+- Review todos regularly (daily/weekly)
+- Promote important items to formal tasks
+- Remove completed or outdated items
+- Keep this list focused and actionable
+
+---
+
+*Todo items are meant for quick capture. For formal development work, create proper tasks in active/ACTIVE_TASKS.md following the TDD methodology.*
+"""
+        
+        todo_list_file = self.claude_tasks_dir / "todo" / "TODO_LIST.md"
+        if not todo_list_file.exists() or self.force:
+            content = todo_list_content.replace("[DATE]", datetime.now().strftime("%Y-%m-%d"))
+            todo_list_file.write_text(content)
+            print(f"📄 Created: todo/TODO_LIST.md")
+        
+        # Create /todo command
+        todo_command_content = """# Add Todo Item
+
+Add the following item to the todo list:
+
+**Todo Item**: {todo_text}
+
+## Instructions:
+
+1. **Read current todo list** from `claude_tasks/todo/TODO_LIST.md`
+
+2. **Add new todo item** in the "Todo Items" section using this format:
+   ```markdown
+   ### {current_timestamp} - 📝 New
+   **Todo**: {todo_description}
+   **Added**: {current_date_time}
+   
+   ---
+   ```
+
+3. **Update timestamp** in the "Last Updated" field at the top
+
+4. **Keep organized** - add new items at the top of the Todo Items section
+
+5. **Brief confirmation** - Simply confirm "Added to todo list" without repeating the item
+
+This provides quick capture of ideas and tasks during development. Items can later be promoted to formal tasks in `claude_tasks/active/ACTIVE_TASKS.md` when ready for TDD development work.
+
+**Usage Examples:**
+- `/todo "add error handling to login"`
+- `/todo "investigate performance issue"`
+- `/todo "refactor user service"`
+"""
+        
+        todo_command_file = self.target / ".claude" / "commands" / "todo.md"
+        if not todo_command_file.exists() or self.force:
+            todo_command_file.write_text(todo_command_content)
+            print(f"📄 Created: .claude/commands/todo.md")
+    
+    def _create_claude_commands(self):
+        """Create Claude slash commands."""
+        commands_dir = self.target / ".claude" / "commands"
+        
+        # Create /refresh command
+        refresh_content = """# Refresh Development Context
+
+Please perform the following tasks in order:
+
+1. **Reread Core Documentation:**
+   - Read CLAUDE.md to understand project context and development methodology
+   - Read claude_tasks/QUICK_REFERENCE.md for TDD workflow
+   - Read claude_tasks/PRINCIPLES_QUICK_CARD.md for the 7 core principles
+   - Read claude_tasks/DEVELOPMENT_PROCESS.md for complete methodology
+
+2. **Review Active Tasks:**
+   - Read claude_tasks/active/ACTIVE_TASKS.md
+   - Analyze current task statuses and priorities
+   - Identify any tasks marked as "completed" or "done"
+
+3. **Review Todo List:**
+   - Read claude_tasks/todo/TODO_LIST.md
+   - Check for any todos that should be promoted to formal tasks
+   - Note any completed todos that can be removed
+
+4. **Clean Up Completed Tasks:**
+   - For any completed tasks found in ACTIVE_TASKS.md:
+     - Create properly formatted files in claude_tasks/finished/ using format YYYYMMDD_HHMM_task_name.md
+     - Use the task template format from QUICK_REFERENCE.md
+     - Include test coverage, TDD process notes, and results
+     - Remove the completed tasks from ACTIVE_TASKS.md
+   - Update the "Last Updated" timestamp in ACTIVE_TASKS.md
+
+5. **Provide Summary:**
+   - Summarize current project state
+   - List remaining active tasks with priorities
+   - List current todos and suggest promotions
+   - Note any blockers or issues found
+   - Suggest next steps based on current task queue
+
+This command ensures I have full context of the project's development methodology and current state before proceeding with any work.
+"""
+        
+        refresh_file = commands_dir / "refresh.md"
+        if not refresh_file.exists() or self.force:
+            refresh_file.write_text(refresh_content)
+            print(f"📄 Created: .claude/commands/refresh.md")
+        else:
+            print(f"⏭️  Skipping existing: .claude/commands/refresh.md")
+        
+        # Create /todo command  
+        todo_content = """# Add Todo Item
+
+Add the following item to the todo list:
+
+**Todo Item**: {todo_text}
+
+## Instructions:
+
+1. **Read current todo list** from `claude_tasks/todo/TODO_LIST.md`
+
+2. **Add new todo item** in the "Todo Items" section using this format:
+   ```markdown
+   ### {current_timestamp} - 📝 New
+   **Todo**: {todo_description}
+   **Added**: {current_date_time}
+   
+   ---
+   ```
+
+3. **Update timestamp** in the "Last Updated" field at the top
+
+4. **Keep organized** - add new items at the top of the Todo Items section
+
+5. **Brief confirmation** - Simply confirm "Added to todo list" without repeating the item
+
+This provides quick capture of ideas and tasks during development. Items can later be promoted to formal tasks in `claude_tasks/active/ACTIVE_TASKS.md` when ready for TDD development work.
+
+**Usage Examples:**
+- `/todo "add error handling to login"`
+- `/todo "investigate performance issue"`
+- `/todo "refactor user service"`
+"""
+        
+        todo_file = commands_dir / "todo.md"
+        if not todo_file.exists() or self.force:
+            todo_file.write_text(todo_content)
+            print(f"📄 Created: .claude/commands/todo.md")
+        else:
+            print(f"⏭️  Skipping existing: .claude/commands/todo.md")
     
     def _handle_claude_md(self):
         """Create or update CLAUDE.md file."""
