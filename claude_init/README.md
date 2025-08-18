@@ -1,6 +1,6 @@
-# Claude Task Management System
+# Claude Task Management System with BDD+TDD
 
-A structured methodology for AI-assisted software development using Claude Code (claude.ai/code).
+A comprehensive methodology for AI-assisted software development using Claude Code (claude.ai/code) with integrated Behavior-Driven Development (BDD) and Test-Driven Development (TDD).
 
 ## 🚀 Quick Start
 
@@ -21,13 +21,15 @@ python setup_claude_tasks.py --source https://github.com/foolishimp/claude_init
 
 ## 📋 What This Provides
 
-The Claude Task Management System establishes:
+The Claude Task Management System with BDD+TDD establishes:
 
-1. **Test-Driven Development (TDD) workflow**
-2. **Structured task tracking and documentation**
-3. **Clear development principles**
-4. **Pair programming patterns with AI**
-5. **Session management tools**
+1. **Enhanced 9-Step BDD+TDD workflow** (SPECIFY → RED → GREEN → REFACTOR → VALIDATE)
+2. **Behavior-Driven Development with Gherkin scenarios**
+3. **AI-specific behavior patterns** (model validation, bias detection, compliance)
+4. **Stakeholder collaboration through living documentation**
+5. **Structured task tracking and documentation**
+6. **Clear development principles**
+7. **Pair programming patterns with AI**
 
 ## 🏗️ Structure Created
 
@@ -35,24 +37,36 @@ The Claude Task Management System establishes:
 your-project/
 ├── CLAUDE.md                    # Project guidance for Claude
 └── claude_tasks/
-    ├── QUICK_REFERENCE.md       # Commands and workflow
-    ├── PRINCIPLES_QUICK_CARD.md # Core principles
-    ├── DEVELOPMENT_PROCESS.md   # TDD methodology
+    ├── QUICK_REFERENCE.md       # Commands and BDD+TDD workflow
+    ├── BDD_PROCESS.md           # Complete 9-step methodology
+    ├── PRINCIPLES_QUICK_CARD.md # Core principles + BDD principles
+    ├── DEVELOPMENT_PROCESS.md   # Legacy TDD methodology
     ├── TASK_TEMPLATE.md         # Template for tasks
+    ├── behaviors/               # BDD specifications
+    │   ├── features/            # Gherkin feature files
+    │   ├── step_definitions/    # Test implementations
+    │   ├── reports/             # Living documentation
+    │   └── README.md           # BDD guidance
     ├── active/
-    │   └── ACTIVE_TASKS.md      # Current tasks
-    └── finished/                 # Completed tasks archive (tracked in git)
+    │   └── ACTIVE_TASKS.md      # Current tasks with behaviors
+    └── finished/                # Completed tasks archive
 ```
 
 ## 🎯 Core Principles
 
-1. **Test Driven Development** - Write tests first
+1. **Test Driven Development** - Behaviors before tests before code
 2. **Fail Fast & Root Cause** - Fix problems at source
 3. **Modular & Maintainable** - Single responsibility
 4. **Reuse Before Build** - Check existing code first
 5. **Open Source First** - Suggest alternatives
 6. **No Legacy Baggage** - Clean slate approach
 7. **Perfectionist Excellence** - Best of breed only
+
+### BDD Principles
+- **Behavior-First**: Start with business outcomes
+- **Stakeholder Collaboration**: Include business in specification
+- **Living Documentation**: Scenarios become documentation
+- **Outside-In Development**: Work from user value to implementation
 
 ## 💻 Usage
 
@@ -119,11 +133,15 @@ Edit `claude_tasks/active/ACTIVE_TASKS.md`:
   - [ ] Project structure defined
 ```
 
-5. **Start with TDD**
+5. **Start with BDD+TDD**
 ```bash
-# Write failing test (RED)
-# Write code to pass (GREEN)
-# Refactor (REFACTOR)
+# 1. SPECIFY: Write behavior scenario in Gherkin
+touch claude_tasks/behaviors/features/my_feature.feature
+
+# 2. RED: Write failing test from scenario
+# 3. GREEN: Write code to pass
+# 4. REFACTOR: Improve code quality
+# 5. VALIDATE: Confirm behavior works
 # Document in finished/ when complete
 ```
 
@@ -144,37 +162,41 @@ TDD: RED → GREEN → REFACTOR"
 
 ## 📚 Daily Workflow
 
-1. **Start Session**: Review `claude_tasks/SESSION_STARTER.md`
+1. **Start Session**: Review `claude_tasks/BDD_PROCESS.md`
 2. **Check Tasks**: Read `claude_tasks/active/ACTIVE_TASKS.md`
-3. **Follow TDD**: RED → GREEN → REFACTOR
-4. **Document**: Move completed tasks to `finished/`
-5. **Commit**: Use descriptive messages
+3. **Follow BDD+TDD**: SPECIFY → RED → GREEN → REFACTOR → VALIDATE
+4. **Document**: Move completed tasks to `finished/` with behavior validation
+5. **Commit**: Use enhanced BDD+TDD message format
 
 ## 🤝 Working with Claude
 
 When Claude Code works on your project, it will:
 
 1. Check `CLAUDE.md` for project context
-2. Follow principles in `claude_tasks/`
-3. Use TDD methodology
-4. Track tasks systematically
-5. Document decisions
+2. Follow BDD+TDD principles in `claude_tasks/`
+3. Write Gherkin scenarios before coding
+4. Use enhanced 9-step methodology
+5. Track tasks with behavior specifications
+6. Generate living documentation
+7. Validate stakeholder expectations
 
 ## 📖 Documentation
 
 ### For Developers
 
-- Review `QUICK_REFERENCE.md` for commands
-- Follow `DEVELOPMENT_PROCESS.md` for TDD
-- Check `PRINCIPLES_QUICK_CARD.md` for standards
+- Review `QUICK_REFERENCE.md` for BDD+TDD commands
+- Follow `BDD_PROCESS.md` for complete 9-step methodology
+- Check `PRINCIPLES_QUICK_CARD.md` for standards and BDD principles
+- Read `behaviors/README.md` for Gherkin scenario guidance
 
 ### For Claude
 
 The system makes your project "Claude-aware" by:
-- Providing clear development methodology
-- Establishing consistent patterns
-- Defining quality standards
-- Creating task tracking structure
+- Providing enhanced BDD+TDD methodology
+- Establishing stakeholder collaboration patterns
+- Defining quality standards with behavior validation
+- Creating comprehensive task tracking with scenarios
+- Enabling living documentation generation
 
 ## 🔧 Customization
 

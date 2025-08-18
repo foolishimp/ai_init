@@ -1,0 +1,44 @@
+{
+  "name": "ai_init",
+  "version": "2.0.0",
+  "description": "AI development tools installer with BDD+TDD methodology",
+  "main": "setup_all.py",
+  "scripts": {
+    "install-all": "python setup_all.py",
+    "install-claude": "python claude_init/setup_claude_tasks.py",
+    "install-dashboard": "python setup_test_dashboard.py",
+    "version": "cat VERSION"
+  },
+  "keywords": [
+    "ai",
+    "development",
+    "tdd",
+    "bdd",
+    "testing",
+    "claude",
+    "behavior-driven-development",
+    "test-driven-development",
+    "gherkin",
+    "cucumber",
+    "stakeholder-collaboration"
+  ],
+  "author": "AI Init Framework Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/ai_init.git"
+  },
+  "engines": {
+    "python": ">=3.8"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "files": [
+    "claude_init/",
+    "setup_all.py",
+    "setup_test_dashboard.py",
+    "VERSION",
+    "CHANGELOG.md",
+    "README.md"
+  ]
+}
