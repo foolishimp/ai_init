@@ -14,11 +14,15 @@
 - **Estimated Time**: X hours
 - **Dependencies**: None
 - **Description**: Clear description of what needs to be done
+- **Feature File**: `behaviors/features/example.feature` (if applicable)
+- **Behaviors to Implement**:
+  - [ ] Scenario: [Business scenario description]
+  - [ ] Scenario: [Another scenario if applicable]
 - **Acceptance Criteria**:
-  - [ ] Tests written and passing
-  - [ ] Code implemented
-  - [ ] Documentation updated
-  - [ ] Code reviewed
+  - [ ] All scenarios in feature file pass
+  - [ ] Unit tests pass with >80% coverage
+  - [ ] Integration tests validate behavior
+  - [ ] Stakeholder approval on behavior validation
 
 ---
 
@@ -26,8 +30,9 @@
 *Move to finished/YYYYMMDD_HHMM_task_name.md when complete*
 
 ## Notes
-- Follow TDD: Write tests first (RED → GREEN → REFACTOR)
+- Follow BDD+TDD: SPECIFY → RED → GREEN → REFACTOR → VALIDATE
+- Write Gherkin scenarios before coding
 - Update status as you work
-- Document in finished/ when complete
-- Commit after each task completion
+- Document behaviors and implementation in finished/
+- Include stakeholders in behavior validation
 EOF < /dev/null

@@ -165,10 +165,11 @@ class AIInitSetup:
         print(f"\n🎉 Your project is now equipped with AI development tools!")
         
         if installed_claude:
-            print(f"\n🧠 Claude Task Management System:")
-            print(f"   📁 claude_tasks/ - Task management framework")
+            print(f"\n🧠 Claude Task Management System with BDD+TDD:")
+            print(f"   📁 claude_tasks/ - Enhanced task management framework")
+            print(f"   📁 claude_tasks/behaviors/ - BDD specifications and scenarios")
             print(f"   📄 CLAUDE.md - AI development guidance")
-            print(f"   🎯 Start with: cat claude_tasks/SESSION_STARTER.md")
+            print(f"   🎯 Start with: cat claude_tasks/BDD_PROCESS.md")
         
         if installed_dashboard:
             print(f"\n📊 Test-Driven Development Dashboard:")
@@ -181,7 +182,8 @@ class AIInitSetup:
         step = 1
         
         if installed_claude:
-            print(f"{step}. Review development methodology:")
+            print(f"{step}. Review BDD+TDD methodology:")
+            print(f"   cat claude_tasks/BDD_PROCESS.md")
             print(f"   cat claude_tasks/PRINCIPLES_QUICK_CARD.md")
             step += 1
         
@@ -191,9 +193,10 @@ class AIInitSetup:
         
         if installed_claude and installed_dashboard:
             print(f"{step}. Use both tools together:")
+            print(f"   - Write scenarios in claude_tasks/behaviors/features/")
             print(f"   - Plan tasks in claude_tasks/active/ACTIVE_TASKS.md")
             print(f"   - Monitor tests in the dashboard")
-            print(f"   - Follow TDD: RED → GREEN → REFACTOR")
+            print(f"   - Follow BDD+TDD: SPECIFY → RED → GREEN → REFACTOR → VALIDATE")
             step += 1
         
         print(f"{step}. Commit your setup:")

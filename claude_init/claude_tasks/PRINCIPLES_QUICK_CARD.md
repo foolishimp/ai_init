@@ -4,8 +4,8 @@
 
 ### 1️⃣ Test Driven Development
 **"No code without tests"**
-- RED → GREEN → REFACTOR
-- Tests first, always
+- SPECIFY → RED → GREEN → REFACTOR → VALIDATE
+- Behaviors first, tests second, code third
 
 ### 2️⃣ Fail Fast & Root Cause
 **"Break loudly, fix completely"**
@@ -60,7 +60,7 @@ Need to build something?
 
 ## 🔥 The Mantras
 
-1. **"Tests before code"**
+1. **"Behaviors before tests before code"**
 2. **"Fail loud, fix deep"**
 3. **"One job per module"**
 4. **"Search before create"**
@@ -68,15 +68,24 @@ Need to build something?
 6. **"No debt, fresh start"**
 7. **"Excellence or nothing"**
 
+## 🧠 BDD Principles
+
+- **Behavior-First**: Start with business outcomes
+- **Stakeholder Collaboration**: Include business in specification  
+- **Living Documentation**: Scenarios become documentation
+- **Outside-In Development**: Work from user value to implementation
+- **Ubiquitous Language**: Shared vocabulary across team
+
 ## ⚡ In Practice
 
 Before writing ANY code, ask:
-1. ✅ Do I have a failing test?
-2. ✅ Did I check for existing solutions?
-3. ✅ Will this fail visibly if broken?
-4. ✅ Is this modular and decoupled?
-5. ✅ Am I creating tech debt?
-6. ✅ Is this excellent?
+1. ✅ Do I have behavior scenarios in Gherkin?
+2. ✅ Do I have a failing test from those scenarios?
+3. ✅ Did I check for existing solutions?
+4. ✅ Will this fail visibly if broken?
+5. ✅ Is this modular and decoupled?
+6. ✅ Am I creating tech debt?
+7. ✅ Is this excellent?
 
 If any answer is NO, stop and reconsider.
 

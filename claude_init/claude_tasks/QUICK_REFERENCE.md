@@ -9,20 +9,22 @@ npm test
 
 # 2. Review core docs
 cat claude_tasks/PRINCIPLES_QUICK_CARD.md
-cat claude_tasks/DEVELOPMENT_PROCESS.md
+cat claude_tasks/BDD_PROCESS.md
 ```
 
-## 🔴 Start a New Task (TDD Process)
+## 🔴 Start a New Task (BDD+TDD Process)
 1. **CHECK**: Current state and active tasks
-2. **PLAN**: Update ACTIVE_TASKS.md to "In Progress"
-3. **RED**: Write failing tests FIRST
+2. **SPECIFY**: Write behavior in Gherkin (behaviors/features/)
+3. **PLAN**: Update ACTIVE_TASKS.md with behaviors
+4. **RED**: Write failing tests from specifications
    ```bash
    # Create test file before implementation
    touch src/modules/feature/__tests__/feature.test.ts
    ```
-4. **GREEN**: Write minimal code to pass tests
-5. **REFACTOR**: Improve code quality
-6. **For new features**: Create feature flag
+5. **GREEN**: Write minimal code to pass tests
+6. **REFACTOR**: Improve code quality
+7. **VALIDATE**: Confirm behaviors work as specified
+8. **For new features**: Create feature flag
    ```json
    "task-N-feature-name": {
      "defaultValue": false,
@@ -100,14 +102,22 @@ Test categories:
 
 ## Common Commands
 ```bash
-# TDD Testing
-npm test                        # Run all tests
+# BDD+TDD Testing
+npm test                        # Run unit tests
+npx cucumber-js                 # Run BDD scenarios
 npm test -- --watch            # Watch mode for TDD
 npm test -- --coverage         # Check coverage (>80%)
+
+# BDD Documentation
+npx cucumber-js --format html:claude_tasks/behaviors/reports/living_docs.html
 
 # Task Management
 cat claude_tasks/active/ACTIVE_TASKS.md
 ls claude_tasks/finished/
+
+# BDD Quick Commands
+touch claude_tasks/behaviors/features/my_feature.feature
+cat claude_tasks/behaviors/README.md
 
 # Test Dashboard
 open http://localhost:3000/test-dashboard.html
@@ -315,23 +325,43 @@ featureFlags.resetOverrides();
 
 This standard ensures consistent task tracking and makes it easy to understand what work was done, when, and why.
 
-## 🔄 Quick TDD Workflow
+## 🔄 Quick BDD+TDD Workflow
 
 ```bash
-# 1. RED: Write failing test
+# 1. SPECIFY: Write Gherkin scenario
+touch claude_tasks/behaviors/features/my_feature.feature
+
+# 2. RED: Write failing test from scenario
 npm test -- --watch feature.test.ts
 
-# 2. GREEN: Write minimal code
+# 3. GREEN: Write minimal code
 # (Edit implementation until test passes)
 
-# 3. REFACTOR: Improve code
+# 4. REFACTOR: Improve code
 # (Keep tests green while refactoring)
 
-# 4. Check coverage
+# 5. VALIDATE: Run BDD scenarios
+npx cucumber-js claude_tasks/behaviors/features/my_feature.feature
+
+# 6. Check coverage
 npm test -- --coverage
 
-# 5. Run through dashboard
-open http://localhost:3000/test-dashboard.html
+# 7. Generate living docs
+npx cucumber-js --format html:claude_tasks/behaviors/reports/living_docs.html
+```
+
+## 📝 Gherkin Template
+```gherkin
+Feature: [Feature Name]
+  As a [user type]
+  I want to [goal]
+  So that [business value]
+
+  Scenario: [Scenario Name]
+    Given [context]
+    When [action]
+    Then [outcome]
+    And [additional outcome]
 ```
 
 ## 📝 Pair Programming Reminders

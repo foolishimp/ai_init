@@ -38,20 +38,51 @@ npm test
 
 # 2. Review core docs
 cat claude_tasks/PRINCIPLES_QUICK_CARD.md
-cat claude_tasks/DEVELOPMENT_PROCESS.md
+cat claude_tasks/BDD_PROCESS.md
 ```
 
-## 🔴 Start a New Task (TDD Process)
+## 🔴 Start a New Task (BDD+TDD Process)
 1. **CHECK**: Current state and active tasks
-2. **PLAN**: Update ACTIVE_TASKS.md to "In Progress"
-3. **RED**: Write failing tests FIRST
-4. **GREEN**: Write minimal code to pass tests
-5. **REFACTOR**: Improve code quality
+2. **SPECIFY**: Write behavior in Gherkin (behaviors/features/)
+3. **PLAN**: Update ACTIVE_TASKS.md with behaviors
+4. **RED**: Write failing tests from specifications
+5. **GREEN**: Write minimal code to pass tests
+6. **REFACTOR**: Improve code quality
+7. **VALIDATE**: Confirm behaviors work as specified
+8. **DOCUMENT**: Record behaviors + implementation
+9. **COMMIT**: Save with BDD+TDD message
 
 ## ✅ Complete a Task
-1. **DOCUMENT**: Create finished file
-2. **COMMIT**: With descriptive message
-3. **ARCHIVE**: Move to finished/
+1. **VALIDATE**: All scenarios pass
+2. **DOCUMENT**: Create finished file with behaviors
+3. **COMMIT**: With BDD+TDD message format
+4. **ARCHIVE**: Move to finished/
+
+## 🥒 BDD Quick Commands
+```bash
+# Create new feature file
+touch claude_tasks/behaviors/features/my_feature.feature
+
+# Run behavior tests (example with Cucumber)
+npx cucumber-js claude_tasks/behaviors/features/
+
+# Generate living documentation
+npx cucumber-js --format html > claude_tasks/behaviors/reports/living_docs.html
+```
+
+## 📝 Gherkin Template
+```gherkin
+Feature: [Feature Name]
+  As a [user type]
+  I want to [goal]
+  So that [business value]
+
+  Scenario: [Scenario Name]
+    Given [context]
+    When [action]
+    Then [outcome]
+    And [additional outcome]
+```
 """,
     "PRINCIPLES_QUICK_CARD.md": """# Development Principles Quick Card
 
@@ -65,14 +96,22 @@ cat claude_tasks/DEVELOPMENT_PROCESS.md
 6. **No Legacy Baggage** - Clean slate, no tech debt
 7. **Perfectionist Excellence** - Best of breed only
 
-## TDD Workflow
-RED → GREEN → REFACTOR
+## BDD+TDD Workflow
+SPECIFY → RED → GREEN → REFACTOR → VALIDATE
 
 ## Code Quality Standards
 - >80% test coverage
+- All behaviors validated
 - Clear naming conventions
-- Documented decisions
+- Living documentation current
 - No commented-out code
+
+## BDD Principles
+- **Behavior-First**: Start with business outcomes
+- **Stakeholder Collaboration**: Include business in specification
+- **Living Documentation**: Scenarios become documentation
+- **Outside-In Development**: Work from user value to implementation
+- **Ubiquitous Language**: Shared vocabulary across team
 """,
     "ACTIVE_TASKS.md": """# Active Tasks
 
@@ -90,10 +129,15 @@ RED → GREEN → REFACTOR
 - **Estimated Time**: X hours
 - **Dependencies**: None
 - **Description**: [Clear description of what needs to be done]
+- **Feature File**: `behaviors/features/example.feature` (if applicable)
+- **Behaviors to Implement**:
+  - [ ] Scenario: [Business scenario description]
+  - [ ] Scenario: [Another scenario if applicable]
 - **Acceptance Criteria**:
-  - [ ] Criterion 1
-  - [ ] Criterion 2
-  - [ ] Tests pass
+  - [ ] All scenarios in feature file pass
+  - [ ] Unit tests pass with >80% coverage
+  - [ ] Integration tests validate behavior
+  - [ ] Stakeholder approval on behavior validation
 
 ---
 
@@ -101,9 +145,157 @@ RED → GREEN → REFACTOR
 *Move to finished/ folder when complete*
 
 ## Notes
-- Follow TDD: Write tests first
+- Follow BDD+TDD: SPECIFY → RED → GREEN → REFACTOR → VALIDATE
+- Write Gherkin scenarios before coding
 - Update status as you work
-- Document in finished/ when complete
+- Document behaviors and implementation in finished/
+- Include stakeholders in behavior validation
+""",
+    "BDD_PROCESS.md": """# BDD+TDD Development Process
+
+## Enhanced 9-Step Process
+
+### 1. CHECK → Current state and active tasks
+- Review `claude_tasks/active/ACTIVE_TASKS.md`
+- Check git status and test state
+- Understand current project context
+
+### 2. SPECIFY → Write behavior specifications in Gherkin
+- Create or update feature files in `behaviors/features/`
+- Use Given/When/Then format
+- Focus on business value and user outcomes
+- Include AI-specific scenarios (accuracy, bias, compliance)
+
+### 3. PLAN → Update ACTIVE_TASKS.md with behaviors
+- Link behaviors to feature files
+- Define acceptance criteria
+- Estimate effort and dependencies
+
+### 4. RED → Write failing tests from specifications
+- Create unit tests based on Gherkin scenarios
+- Write integration tests for behavior validation
+- Ensure tests fail initially
+
+### 5. GREEN → Write minimal code to pass tests
+- Implement just enough code to make tests pass
+- Focus on making behaviors work
+- Don't optimize yet
+
+### 6. REFACTOR → Improve code quality
+- Clean up implementation while keeping tests green
+- Extract reusable components
+- Improve naming and structure
+
+### 7. VALIDATE → Confirm behaviors work as specified
+- Run all scenarios in feature files
+- Verify acceptance criteria are met
+- Test with real data if applicable
+- Confirm stakeholder expectations
+
+### 8. DOCUMENT → Record implementation and behaviors
+- Update living documentation
+- Document design decisions
+- Record behavior validation results
+- Create finished task documentation
+
+### 9. COMMIT → Save with BDD+TDD message
+- Include both behavior and technical details
+- Reference feature files and test coverage
+- Follow commit message template
+
+## BDD Benefits for AI Projects
+
+### Stakeholder Alignment
+- Business-readable specifications in Gherkin
+- Clear acceptance criteria before implementation
+- Living documentation that stays current
+- Collaborative requirement definition
+
+### AI-Specific Behaviors
+- Model accuracy requirements as testable scenarios
+- Bias detection and mitigation workflows
+- Human-in-loop validation processes
+- Regulatory compliance behaviors
+- Data quality and validation scenarios
+
+### Example AI Project Behaviors
+
+```gherkin
+Feature: AI Model Accuracy Validation
+  As a data scientist
+  I want to validate model accuracy automatically
+  So that I can ensure reliable AI recommendations
+
+  Scenario: High-stakes prediction validation
+    Given a trained AI model for financial predictions
+    And a prediction with confidence score below 85%
+    When the system processes the prediction
+    Then it should flag for human review
+    And it should log the uncertainty for audit
+    And it should not execute automated actions
+
+  Scenario: Bias detection in recommendations
+    Given an AI recommendation system
+    And a set of test cases covering protected groups
+    When the system generates recommendations
+    Then it should show consistent accuracy across groups
+    And it should flag any significant bias detected
+    And it should provide explanation for flagged cases
+```
+
+## Commit Message Template
+
+```
+Task #X: [Brief description]
+
+BEHAVIOR: [Business value delivered]
+- Feature: [Gherkin scenarios that now pass]
+- Stakeholder impact: [Who benefits and how]
+
+TECHNICAL: [Implementation details]
+- TDD: [Tests written/passing] | Coverage: [X%]
+- Architecture: [Key design decisions]
+- Integration: [Systems affected]
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+## Tool Integration
+
+### Recommended BDD Tools
+- **Cucumber.js** (JavaScript) or **behave** (Python)
+- **Allure** or **Cucumber Reports** for living documentation
+- **VS Code Cucumber Extension** for Gherkin editing
+- **Gherkin syntax highlighting** in IDE
+
+### File Organization
+```
+behaviors/
+├── features/           # Gherkin feature files
+│   ├── user_stories.feature
+│   ├── ai_validation.feature
+│   └── compliance.feature
+├── step_definitions/   # Test implementations
+│   ├── common_steps.js
+│   └── ai_steps.js
+└── reports/           # Generated documentation
+    ├── cucumber_report.html
+    └── living_docs.md
+```
+
+## Best Practices
+
+1. **Start with behaviors** before writing any code
+2. **Write scenarios collaboratively** with stakeholders
+3. **Keep scenarios focused** on business outcomes
+4. **Use consistent language** across features
+5. **Validate behaviors regularly** with stakeholders
+6. **Maintain living documentation** automatically
+7. **Include AI-specific scenarios** for model validation
+8. **Test edge cases** and error conditions
+9. **Document assumptions** and constraints
+10. **Review and refine** scenarios based on feedback
 """
 }
 
@@ -181,6 +373,10 @@ class ClaudeTasksSetup:
             self.claude_tasks_dir / "active",
             self.claude_tasks_dir / "finished", 
             self.claude_tasks_dir / "todo",
+            self.claude_tasks_dir / "behaviors",
+            self.claude_tasks_dir / "behaviors" / "features",
+            self.claude_tasks_dir / "behaviors" / "step_definitions",
+            self.claude_tasks_dir / "behaviors" / "reports",
             self.target / ".claude",
             self.target / ".claude" / "commands",
         ]
@@ -239,6 +435,7 @@ class ClaudeTasksSetup:
         files_to_copy = [
             "QUICK_REFERENCE.md",
             "PRINCIPLES_QUICK_CARD.md",
+            "BDD_PROCESS.md",
             "DEVELOPMENT_PROCESS.md",
             "PAIR_PROGRAMMING_WITH_CLAUDE.md",
             "UNIFIED_PRINCIPLES.md",
@@ -289,6 +486,39 @@ class ClaudeTasksSetup:
                 if not target_cmd.exists() or self.force:
                     shutil.copy2(cmd_file, target_cmd)
                     print(f"📄 Copied: .claude/commands/{cmd_file.name}")
+        
+        # Copy behaviors directory if it exists
+        behaviors_source = source_path / "behaviors"
+        if behaviors_source.exists():
+            behaviors_target = self.claude_tasks_dir / "behaviors"
+            
+            # Copy behaviors README
+            readme_source = behaviors_source / "README.md"
+            if readme_source.exists():
+                readme_target = behaviors_target / "README.md"
+                if not readme_target.exists() or self.force:
+                    shutil.copy2(readme_source, readme_target)
+                    print(f"📄 Copied: behaviors/README.md")
+            
+            # Copy features directory
+            features_source = behaviors_source / "features"
+            if features_source.exists():
+                features_target = behaviors_target / "features"
+                for feature_file in features_source.glob("*.feature"):
+                    target_feature = features_target / feature_file.name
+                    if not target_feature.exists() or self.force:
+                        shutil.copy2(feature_file, target_feature)
+                        print(f"📄 Copied: behaviors/features/{feature_file.name}")
+            
+            # Copy step_definitions directory
+            steps_source = behaviors_source / "step_definitions"
+            if steps_source.exists():
+                steps_target = behaviors_target / "step_definitions"
+                for step_file in steps_source.glob("*.js"):
+                    target_step = steps_target / step_file.name
+                    if not target_step.exists() or self.force:
+                        shutil.copy2(step_file, target_step)
+                        print(f"📄 Copied: behaviors/step_definitions/{step_file.name}")
     
     def _create_from_templates(self):
         """Create files from embedded templates."""
@@ -297,6 +527,8 @@ class ClaudeTasksSetup:
         for file_name, content in EMBEDDED_TEMPLATES.items():
             if file_name == "ACTIVE_TASKS.md":
                 target_file = self.claude_tasks_dir / "active" / file_name
+            elif file_name == "BDD_PROCESS.md":
+                target_file = self.claude_tasks_dir / file_name
             else:
                 target_file = self.claude_tasks_dir / file_name
             
@@ -308,8 +540,9 @@ class ClaudeTasksSetup:
                 target_file.write_text(content)
                 print(f"📄 Created: {file_name}")
         
-        # Create todo files and commands
+        # Create todo files, BDD files, and commands
         self._create_todo_files()
+        self._create_bdd_files()
         self._create_claude_commands()
     
     def _create_todo_files(self):
@@ -401,6 +634,270 @@ This provides quick capture of ideas and tasks during development. Items can lat
         if not todo_command_file.exists() or self.force:
             todo_command_file.write_text(todo_command_content)
             print(f"📄 Created: .claude/commands/todo.md")
+    
+    def _create_bdd_files(self):
+        """Create BDD-specific template files."""
+        
+        # Create example feature file
+        example_feature_content = """Feature: Example AI Project Behavior
+  As a [stakeholder type]
+  I want to [achieve some goal]
+  So that [business value is delivered]
+
+  Background:
+    Given the system is properly configured
+    And all dependencies are available
+
+  Scenario: Successful feature operation
+    Given [initial context or state]
+    When [action is performed]
+    Then [expected outcome occurs]
+    And [additional verification]
+
+  Scenario: Error handling
+    Given [error conditions exist]
+    When [action is attempted]
+    Then [appropriate error handling occurs]
+    And [system remains stable]
+
+  # AI-Specific Scenario Examples
+  Scenario: Model accuracy validation
+    Given a trained AI model
+    And a test dataset with known correct answers
+    When the model makes predictions
+    Then the accuracy should be above the minimum threshold
+    And confidence scores should be properly calibrated
+
+  Scenario: Bias detection and mitigation
+    Given an AI recommendation system
+    And test cases representing different demographic groups
+    When recommendations are generated
+    Then the system should show consistent performance across groups
+    And any detected bias should be flagged for review
+"""
+        
+        example_feature_file = self.claude_tasks_dir / "behaviors" / "features" / "example.feature"
+        if not example_feature_file.exists() or self.force:
+            example_feature_file.write_text(example_feature_content)
+            print(f"📄 Created: behaviors/features/example.feature")
+        
+        # Create step definitions template
+        step_definitions_content = """// Step Definitions Template
+// This file shows examples of how to implement Gherkin steps
+
+// Example step definitions for Cucumber.js
+// Adapt these patterns to your testing framework
+
+const { Given, When, Then } = require('@cucumber/cucumber');
+const assert = require('assert');
+
+// Context steps
+Given('the system is properly configured', function () {
+  // Setup system configuration
+  this.systemConfig = {
+    initialized: true,
+    dependencies: 'available'
+  };
+});
+
+Given('all dependencies are available', function () {
+  // Verify dependencies
+  assert(this.systemConfig.dependencies === 'available');
+});
+
+// Action steps
+When('I perform {string}', function (action) {
+  // Perform the specified action
+  this.lastAction = action;
+  this.result = performAction(action);
+});
+
+// Outcome verification steps
+Then('the result should be {string}', function (expectedResult) {
+  assert.strictEqual(this.result, expectedResult);
+});
+
+Then('the system should remain stable', function () {
+  // Verify system stability
+  assert(this.systemConfig.initialized === true);
+});
+
+// AI-specific step definitions
+Given('a trained AI model', function () {
+  this.model = {
+    trained: true,
+    accuracy: 0.95,
+    lastUpdated: new Date()
+  };
+});
+
+When('the model makes predictions on {string}', function (dataset) {
+  this.predictions = this.model.predict(dataset);
+});
+
+Then('the accuracy should be above {float}', function (threshold) {
+  assert(this.predictions.accuracy > threshold);
+});
+
+Then('confidence scores should be properly calibrated', function () {
+  assert(this.predictions.confidence >= 0 && this.predictions.confidence <= 1);
+});
+
+// Helper functions (implement based on your system)
+function performAction(action) {
+  // Implement action logic
+  return `Result of ${action}`;
+}
+"""
+        
+        step_definitions_file = self.claude_tasks_dir / "behaviors" / "step_definitions" / "common_steps.js"
+        if not step_definitions_file.exists() or self.force:
+            step_definitions_file.write_text(step_definitions_content)
+            print(f"📄 Created: behaviors/step_definitions/common_steps.js")
+        
+        # Create BDD configuration template
+        cucumber_config_content = """// Cucumber.js Configuration
+// cucumber.js
+
+module.exports = {
+  default: {
+    require: [
+      'claude_tasks/behaviors/step_definitions/**/*.js'
+    ],
+    format: [
+      'progress-bar',
+      'html:claude_tasks/behaviors/reports/cucumber_report.html',
+      'json:claude_tasks/behaviors/reports/cucumber_report.json'
+    ],
+    paths: [
+      'claude_tasks/behaviors/features/**/*.feature'
+    ],
+    parallel: 2
+  }
+};
+"""
+        
+        cucumber_config_file = self.target / "cucumber.js"
+        if not cucumber_config_file.exists() or self.force:
+            cucumber_config_file.write_text(cucumber_config_content)
+            print(f"📄 Created: cucumber.js")
+        
+        # Create README for behaviors directory
+        behaviors_readme_content = """# Behaviors Directory
+
+This directory contains Behavior-Driven Development (BDD) specifications and tests.
+
+## Structure
+
+### features/
+Contains Gherkin feature files that describe business behaviors in natural language.
+- Write scenarios from the user's perspective
+- Focus on business value and outcomes
+- Use consistent language across features
+- Include AI-specific scenarios (accuracy, bias, compliance)
+
+### step_definitions/
+Contains the implementation of Gherkin steps.
+- Map Gherkin steps to actual code
+- Keep step definitions reusable
+- Organize by domain or feature area
+- Include setup and teardown logic
+
+### reports/
+Generated documentation and test reports.
+- Cucumber HTML reports
+- Living documentation
+- Test coverage reports
+- Stakeholder-friendly summaries
+
+## Writing Good BDD Scenarios
+
+### Template
+```gherkin
+Feature: [Feature Name]
+  As a [user type]
+  I want to [goal]
+  So that [business value]
+
+  Scenario: [Scenario Name]
+    Given [context]
+    When [action]
+    Then [outcome]
+```
+
+### AI Project Examples
+
+#### Model Validation
+```gherkin
+Scenario: High-confidence predictions are accepted
+  Given a trained sentiment analysis model
+  And a text input with clear sentiment
+  When the model analyzes the text
+  Then the confidence score should be above 90%
+  And the prediction should be automatically accepted
+```
+
+#### Human-in-Loop Validation
+```gherkin
+Scenario: Low-confidence predictions require human review
+  Given a trained classification model
+  And an ambiguous input case
+  When the model makes a prediction
+  Then the confidence score should be below 80%
+  And the prediction should be flagged for human review
+  And the case should be queued for expert validation
+```
+
+#### Bias Detection
+```gherkin
+Scenario: Fair treatment across demographic groups
+  Given a recommendation system
+  And test cases representing different demographic groups
+  When recommendations are generated for each group
+  Then the approval rates should be within 5% across groups
+  And any statistical bias should be flagged for investigation
+```
+
+## Running BDD Tests
+
+```bash
+# Install Cucumber.js
+npm install --save-dev @cucumber/cucumber
+
+# Run all scenarios
+npx cucumber-js
+
+# Run specific feature
+npx cucumber-js claude_tasks/behaviors/features/my_feature.feature
+
+# Generate HTML report
+npx cucumber-js --format html:claude_tasks/behaviors/reports/living_docs.html
+```
+
+## Integration with TDD
+
+1. **Write BDD scenarios** describing business behavior
+2. **Create step definitions** that call your application code
+3. **Write unit tests** for the implementation details
+4. **Implement the code** to make both BDD scenarios and unit tests pass
+5. **Validate with stakeholders** using the generated reports
+
+## Best Practices
+
+- Keep scenarios focused on business outcomes
+- Use consistent language across all features
+- Include both happy path and error scenarios
+- Write scenarios collaboratively with stakeholders
+- Keep step definitions simple and reusable
+- Generate living documentation regularly
+- Review scenarios with business stakeholders
+- Update scenarios when requirements change
+"""
+        
+        behaviors_readme_file = self.claude_tasks_dir / "behaviors" / "README.md"
+        if not behaviors_readme_file.exists() or self.force:
+            behaviors_readme_file.write_text(behaviors_readme_content)
+            print(f"📄 Created: behaviors/README.md")
     
     def _create_claude_commands(self):
         """Create Claude slash commands."""
@@ -507,21 +1004,27 @@ This provides quick capture of ideas and tasks during development. Items can lat
         existing_content = self.claude_md_path.read_text()
         
         # Check if already has task system reference
-        if "claude_tasks" in existing_content:
-            print("✓ CLAUDE.md already references task system")
+        if "claude_tasks" in existing_content and "BDD+TDD" in existing_content:
+            print("✓ CLAUDE.md already references BDD+TDD task system")
             return
+        elif "claude_tasks" in existing_content:
+            print("🔄 Updating CLAUDE.md to include BDD methodology")
         
         # Prepend reference section
         reference_section = """# CLAUDE.md
 
 ## 📋 Claude Development Process
-This project now uses the Claude Task Management System for AI-assisted development.
+This project uses the Claude Task Management System with BDD+TDD methodology for AI-assisted development.
 
 ### Key Documents
-- `claude_tasks/QUICK_REFERENCE.md` - Quick commands and workflow
-- `claude_tasks/DEVELOPMENT_PROCESS.md` - Full TDD methodology
+- `claude_tasks/QUICK_REFERENCE.md` - Quick commands and BDD+TDD workflow
+- `claude_tasks/BDD_PROCESS.md` - Complete 9-step methodology
 - `claude_tasks/PRINCIPLES_QUICK_CARD.md` - Core development principles
 - `claude_tasks/active/ACTIVE_TASKS.md` - Current task tracking
+- `claude_tasks/behaviors/` - BDD specifications and living documentation
+
+### Development Workflow
+SPECIFY → RED → GREEN → REFACTOR → VALIDATE
 
 ---
 
@@ -540,7 +1043,7 @@ This project now uses the Claude Task Management System for AI-assisted developm
             print(f"📋 Backed up to: {backup_path.name}")
         
         self.claude_md_path.write_text(new_content)
-        print("✅ Updated CLAUDE.md with task system reference")
+        print("✅ Updated CLAUDE.md with BDD+TDD task system reference")
     
     def _create_new_claude_md(self):
         """Create new CLAUDE.md from template."""
@@ -574,11 +1077,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Claude Development Process
 
-This project follows the Claude Task Management System. See `claude_tasks/` for:
-- `QUICK_REFERENCE.md` - Quick commands and TDD workflow
-- `DEVELOPMENT_PROCESS.md` - Complete methodology
-- `PRINCIPLES_QUICK_CARD.md` - Core principles
-- `active/ACTIVE_TASKS.md` - Current tasks
+This project follows the Claude Task Management System with BDD+TDD methodology:
+- Behavior-Driven Development (BDD) for stakeholder alignment
+- Test-Driven Development (TDD) for technical implementation
+- Structured task tracking and documentation
+- AI-aware development patterns
+
+### Key Documents
+- `claude_tasks/QUICK_REFERENCE.md` - Quick commands and BDD+TDD workflow
+- `claude_tasks/BDD_PROCESS.md` - Complete 9-step methodology
+- `claude_tasks/PRINCIPLES_QUICK_CARD.md` - Core development principles
+- `claude_tasks/active/ACTIVE_TASKS.md` - Current task tracking
+- `claude_tasks/behaviors/` - BDD specifications and scenarios
+
+## Core Development Principles
+
+1. **Test Driven Development** - Write tests first, no code without tests
+2. **Fail Fast & Root Cause** - Fix problems at their source, no workarounds
+3. **Modular & Maintainable** - Single responsibility, decoupled components
+4. **Reuse Before Build** - Check existing code and libraries first
+5. **Open Source First** - Suggest alternatives before building new
+6. **No Legacy Baggage** - Start clean, avoid technical debt
+7. **Perfectionist Excellence** - Build best-of-breed solutions only
 
 ## Repository Overview
 
@@ -588,27 +1108,64 @@ This project follows the Claude Task Management System. See `claude_tasks/` for:
 
 ```
 [TODO: Document structure]
+├── claude_tasks/
+│   ├── behaviors/           # BDD specifications
+│   │   ├── features/       # Gherkin feature files
+│   │   ├── step_definitions/ # Test implementations
+│   │   └── reports/        # Living documentation
+│   ├── active/             # Current tasks
+│   └── finished/           # Completed tasks
+├── tests/                  # Unit and integration tests
+└── src/                    # Implementation code
 ```
 
 ## Common Development Commands
 
 ### Testing
 ```bash
-# Run tests
+# Run unit tests
 npm test  # or appropriate command
+
+# Run BDD scenarios
+npx cucumber-js
 
 # With coverage
 npm test -- --coverage
 
-# Watch mode
+# Watch mode for TDD
 npm test -- --watch
+
+# Generate living documentation
+npx cucumber-js --format html:claude_tasks/behaviors/reports/living_docs.html
 ```
 
 ## Working with this Codebase
 
-Follow TDD: RED → GREEN → REFACTOR
+### BDD+TDD Workflow (9 Steps)
+1. **CHECK** → Current state and active tasks
+2. **SPECIFY** → Write behavior specifications in Gherkin
+3. **PLAN** → Update tasks with behaviors to implement
+4. **RED** → Write failing tests from specifications
+5. **GREEN** → Write minimal code to pass tests
+6. **REFACTOR** → Improve code quality
+7. **VALIDATE** → Confirm behaviors work as specified
+8. **DOCUMENT** → Record implementation and behaviors
+9. **COMMIT** → Save with BDD+TDD message
 
-See `claude_tasks/` for detailed methodology.
+### Task Management
+- New tasks go in `claude_tasks/active/ACTIVE_TASKS.md`
+- Write Gherkin scenarios in `claude_tasks/behaviors/features/`
+- Completed tasks move to `claude_tasks/finished/`
+- Follow the enhanced task template with behavior specifications
+
+### AI-Specific Development
+- Include model accuracy validation scenarios
+- Test for bias detection and mitigation
+- Implement human-in-loop validation workflows
+- Document regulatory compliance behaviors
+- Test edge cases and error conditions
+
+See `claude_tasks/` for detailed methodology and `claude_tasks/behaviors/README.md` for BDD guidance.
 """
     
 
@@ -653,11 +1210,15 @@ See `claude_tasks/` for detailed methodology.
         step_num = 1
         
         if claude_tasks_exists:
-            print(f"{step_num}. Review claude_tasks/QUICK_REFERENCE.md for workflow")
+            print(f"{step_num}. Review claude_tasks/QUICK_REFERENCE.md for BDD+TDD workflow")
+            step_num += 1
+            print(f"{step_num}. Read claude_tasks/BDD_PROCESS.md for complete 9-step methodology")
             step_num += 1
             print(f"{step_num}. Read claude_tasks/PRINCIPLES_QUICK_CARD.md for principles")
             step_num += 1
             print(f"{step_num}. Add your first task to claude_tasks/active/ACTIVE_TASKS.md")
+            step_num += 1
+            print(f"{step_num}. Create behavior scenarios in claude_tasks/behaviors/features/")
             step_num += 1
         
         if claude_md_exists:
@@ -670,7 +1231,8 @@ See `claude_tasks/` for detailed methodology.
             step_num += 1
         
         if claude_tasks_exists:
-            print("\n🎯 Start coding with: cat claude_tasks/SESSION_STARTER.md")
+            print("\n🎯 Start with BDD+TDD: cat claude_tasks/BDD_PROCESS.md")
+            print("📝 Example behaviors: cat claude_tasks/behaviors/README.md")
 
 
 def main():
